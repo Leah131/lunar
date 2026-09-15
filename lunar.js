@@ -3882,6 +3882,22 @@
   })();
   var LunarUtil = (function(){
     return {
+      // 需要从宜忌中剔除的封建/宗教/丧葬类词条
+      YI_JI_BLACKLIST: [
+        '纳奴婢','进人口','纳畜','教牛马','畋猎','捕捉','割蜜','造畜稠','牧养','取渔','结网','安碓磑',
+        '祭祀','祈福','求嗣','开光','塑绘','齐醮','斋醮','酬神','造庙','祀灶','焚香','谢土','出火','雕刻',
+        '嫁娶','订婚','纳采','问名','纳婿','归宁','合帐','冠笄','订盟','裁衣','挽面','开容',
+        '修坟','启钻','破土','安葬','立碑','成服','除服','开生坟','合寿木','入殓','移柩','普渡',
+        '开井开池','作陂放水','拆卸','破屋','坏垣','补垣','伐木做梁','开柱眼','穿屏扇架',
+        '盖屋合脊','开厕','造仓','塞穴','平治道涂','造桥','作厕','筑堤','开池','伐木',
+        '开渠','掘井','扫舍','放水','造屋','合脊','造畜稠','修门','定磉','作梁','修饰垣墙','架马',
+        '经络','酝酿','作染','鼓铸','造船','割蜜','取渔','结网','牧养','安碓磑',
+        '栽种','作灶', '挂匾','开仓','置产','雇佣','出货财','安机械','造车器','造船','割蜜',
+        '立碑','成服','除服','开生坟','合寿木','入殓','移柩','普渡',
+        '造庙','祀灶','焚香','谢土','出火','雕刻',
+        '纳采','问名','纳婿','归宁','合帐','冠笄','订盟','裁缝','挽面','开容',
+        '安香','安门','起基','上梁','竖柱','修门','定磉','作梁','修饰垣墙','架马'
+      ],
       BASE_MONTH_ZHI_INDEX:2,
       JIE_QI: ['{jq.dongZhi}', '{jq.xiaoHan}', '{jq.daHan}', '{jq.liChun}', '{jq.yuShui}', '{jq.jingZhe}', '{jq.chunFen}', '{jq.qingMing}', '{jq.guYu}', '{jq.liXia}', '{jq.xiaoMan}', '{jq.mangZhong}', '{jq.xiaZhi}', '{jq.xiaoShu}', '{jq.daShu}', '{jq.liQiu}', '{jq.chuShu}', '{jq.baiLu}', '{jq.qiuFen}', '{jq.hanLu}', '{jq.shuangJiang}', '{jq.liDong}', '{jq.xiaoXue}', '{jq.daXue}'],
       JIE_QI_IN_USE: ['DA_XUE', '{jq.dongZhi}', '{jq.xiaoHan}', '{jq.daHan}', '{jq.liChun}', '{jq.yuShui}', '{jq.jingZhe}', '{jq.chunFen}', '{jq.qingMing}', '{jq.guYu}', '{jq.liXia}', '{jq.xiaoMan}', '{jq.mangZhong}', '{jq.xiaZhi}', '{jq.xiaoShu}', '{jq.daShu}', '{jq.liQiu}', '{jq.chuShu}', '{jq.baiLu}', '{jq.qiuFen}', '{jq.hanLu}', '{jq.shuangJiang}', '{jq.liDong}', '{jq.xiaoXue}', '{jq.daXue}', 'DONG_ZHI', 'XIAO_HAN', 'DA_HAN', 'LI_CHUN', 'YU_SHUI', 'JING_ZHE'],
@@ -5178,10 +5194,17 @@
           }
           index = right.indexOf(day+'=');
         }
-        if(l.length<1){
-          l.push(this.SHEN_SHA[0]);
-        }
-        return l;
+           if(l.length<1){
+      l.push(this.SHEN_SHA[0]);
+    }
+    var blacklist = this.YI_JI_BLACKLIST;
+    l = l.filter(function(item){
+      return blacklist.indexOf(item) === -1;
+    });
+    if(l.length<1){
+      l.push(this.SHEN_SHA[0]);
+    }
+    return l;
       },
       getDayJi:function(monthGanZhi,dayGanZhi){
         var l = [];
@@ -5214,6 +5237,13 @@
           }
           index = right.indexOf(day+'=');
         }
+        if(l.length<1){
+          l.push(this.SHEN_SHA[0]);
+        }
+        var blacklist = this.YI_JI_BLACKLIST;
+        l = l.filter(function(item){
+          return blacklist.indexOf(item) === -1;
+        });
         if(l.length<1){
           l.push(this.SHEN_SHA[0]);
         }
